@@ -1,4 +1,11 @@
+#include <DHT.h>
 #include "RTClib.h"
+
+#define DHTPIN 2
+#define DHTTYPE DHT11
+
+DHT dht(DHTPIN, DHTTYPE);
+
 RTC_DS1307 rtc;
 
 const int pinSolo = A0;
@@ -10,6 +17,7 @@ bool solo;
 void setup() {
   Serial.begin(9600);
   setup_RTC();
+  dht.begin();
   pinMode(pinSolo, OUTPUT);
   pinMode(pinChuva, OUTPUT);
   pinMode(pinRele, OUTPUT);
@@ -72,12 +80,14 @@ void loop() {
   teste_RTC();
   DateTime now = rtc.now();
   int horas = now.hour();
+
+  float humidade = dht.readHumidity();
   
   if (horas >= 18 || horas <= 6) { // Intervalo de acionamento do relé (das 8h às 18h)
     sensor_chuva();
     sensor_solo();
     
-    if (chuva == false && solo == false) {
+    if (chuva == false && solo == false && humidade <= 70) {
       control_rele();
     }
   }
