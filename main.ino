@@ -83,7 +83,7 @@ void loop() {
 
   float humidade = dht.readHumidity();
   
-  if (horas >= 18 || horas <= 6) { // Intervalo de acionamento do relé (das 8h às 18h)
+  if (horas >= 18 || horas <= 6) { // Intervalo de acionamento do relé (das 18h às 6h)
     sensor_chuva();
     sensor_solo();
     
