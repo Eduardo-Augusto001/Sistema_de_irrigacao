@@ -20,7 +20,7 @@ void setup() {
   dht.begin();
   pinMode(pinSolo, OUTPUT);
   pinMode(pinChuva, OUTPUT);
-  pinMode(pinRele, OUTPUT);
+  pinMode(pinRele, INPUT);
 }
 
 void setup_RTC() {
@@ -64,10 +64,10 @@ void sensor_solo() {
 }
 
 void control_rele() {
-  digitalWrite(pinRele, LOW);  // ligado
+  digitalWrite(pinRele, HIGH);  // ligado
   Serial.println("Relé Acionado.");
   delay(5000);
-  digitalWrite(pinRele, HIGH); // desligado
+  digitalWrite(pinRele, LOW); // desligado
 }
 
 void teste_RTC(){
@@ -78,18 +78,21 @@ void teste_RTC(){
 
 void loop() {
   teste_RTC();
+  delay(50)
   DateTime now = rtc.now();
   int horas = now.hour();
-
+  delay(50);
   float humidade = dht.readHumidity();
+  delay(2000);
   
   if (horas >= 18 || horas <= 6) { // Intervalo de acionamento do relé (das 18h às 6h)
     sensor_chuva();
+    delay(100);
     sensor_solo();
+    delay(100);
     
     if (chuva == false && solo == false && humidade <= 70) {
       control_rele();
     }
   }
-  delay(2000);
 }
