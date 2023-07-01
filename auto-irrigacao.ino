@@ -28,7 +28,7 @@ void sensor_chuva(){
 void sensor_solo(){
   int valorSolo = analogRead(pinSolo);
   Serial.print("Sensor do Solo = ");
-  Serial.println(pinSolo);
+  Serial.println(valorSolo);
   if(valorSolo > 500){
     Serial.println(" => O solo está úmido.");
     solo = true;
@@ -40,12 +40,10 @@ void sensor_solo(){
 }
 
 void control_rele(){
-  delay(10000);
   Serial.println("Relé Acionado.");
+  digitalWrite(pinRele, HIGH);
   delay(10000);
-  digitalWrite(pinRele, HIGH); // desligado
-   delay(10000);
-   digitalWrite(pinRele, LOW);
+  digitalWrite(pinRele, LOW);
 }
 
 void loop() {
